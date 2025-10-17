@@ -39,6 +39,12 @@ for i in range(5): #13
 
 print(scales)
 
+scale = 1000000
+# (xmin, ymin, xmax, ymax)
+extent = (3700000, 2700000, 3850000, 2800000)
+export_map_to_geotiff("project.qgz", "tmp/aaa.tiff", scale, extent)
 
 
 
+#
+qgs.exitQgis()

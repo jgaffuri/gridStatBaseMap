@@ -1,8 +1,8 @@
 import sys
 from qgis.core import QgsApplication
 
-# Chemin vers le répertoire d'installation de QGIS
-qgis_prefix = "/usr"
+# Chemin vers le répertoire d'installation de QGIS dans l'environnement Conda
+qgis_prefix = sys.prefix
 
 # Initialiser QgsApplication
 qgs = QgsApplication([], False)
@@ -13,3 +13,5 @@ qgs.initQgis()
 from qgis.core import QgsProject, QgsMapSettings, QgsMapRendererParallelJob, QgsRasterFileWriter, QgsRectangle
 from qgis.gui import QgsMapCanvas
 from PyQt5.QtCore import QSize
+
+print("Environnement PyQGIS initialisé avec succès !")

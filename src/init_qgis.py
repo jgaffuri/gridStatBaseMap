@@ -10,7 +10,7 @@ qgs.setPrefixPath(qgis_prefix, True)
 qgs.initQgis()
 
 # Importer les modules nécessaires après l'initialisation
-from qgis.core import QgsApplication, QgsProject, QgsMapSettings, QgsMapRendererParallelJob, QgsRasterFileWriter, QgsRectangle
+from qgis.core import QgsLayoutExporter, QgsLayoutItemMap, QgsPrintLayout, QgsApplication, QgsProject, QgsMapSettings, QgsMapRendererParallelJob, QgsRasterFileWriter, QgsRectangle
 from qgis.gui import QgsMapCanvas
 from PyQt5.QtCore import QSize
 

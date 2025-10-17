@@ -11,7 +11,7 @@ def export_map_to_geotiff(project_path, output_path, scale, extent):
     map_settings.setLayers(project.mapLayers().values())
     map_settings.setDestinationCrs(project.crs())
     map_settings.setExtent(QgsRectangle(*extent))
-    map_settings.setScale(scale)
+    #map_settings.setScale(scale)
     map_settings.setOutputSize(QSize(800, 600))
 
     job = QgsMapRendererParallelJob(map_settings)

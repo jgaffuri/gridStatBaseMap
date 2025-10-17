@@ -51,16 +51,13 @@ def export_map_to_geotiff(project_path, output_path, extent, dpi=96):
         project.read(project_path)
 
         # Configurer les paramètres de la carte
+        print(project.crs())
         map_settings = QgsMapSettings()
         map_settings.setLayers(project.mapLayers().values())
         map_settings.setDestinationCrs(project.crs())
         map_settings.setExtent(QgsRectangle(*extent))
 
-        # Si l'échelle est spécifiée, l'utiliser, sinon ajuster automatiquement
-        #if scale:
-        #    map_settings.setScale(scale)
-        map_settings.setOutputSize(QSize(800, 600))  # Taille de sortie en pixels
-        map_settings.setDpi(dpi)
+        #map_settings.setOutputSize(QSize(800, 600))  # Taille de sortie en pixels
 
         # Créer un rendu de la carte
         job = QgsMapRendererParallelJob(map_settings)
@@ -101,7 +98,7 @@ print(scales)
 scale = 1000000
 # (xmin, ymin, xmax, ymax)
 extent = (3700000, 2700000, 3850000, 2800000)
-export_map_to_geotiff("project.qgz", "tmp/aaa.tiff", extent)
+export_map_to_geotiff("src/project.qgz", "tmp/aaa.tiff", extent)
 
 
 

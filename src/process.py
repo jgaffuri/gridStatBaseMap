@@ -1,8 +1,11 @@
 
+
 scales = []
 sca = 102400000
-for i in range(5):
+for i in range(5): #13
     scales.append(sca)
     sca /= 2
 
 print(scales)
+
+

@@ -1,5 +1,5 @@
 # Initialisation de QGIS
-from init_qgis import qgs, QgsLayoutExporter, QgsLayoutItemMap, QgsPrintLayout, QgsApplication, QgsProject, QgsMapSettings, QgsMapRendererParallelJob, QgsRasterFileWriter, QgsRectangle, QSize
+from init_qgis import qgs, QgsUnitTypes, QgsLayoutPoint, QgsLayoutSize, QgsLayoutExporter, QgsLayoutItemMap, QgsPrintLayout, QgsApplication, QgsProject, QgsMapSettings, QgsMapRendererParallelJob, QgsRasterFileWriter, QgsRectangle, QSize
 import sys
 
 def export_map(project_path, output_path, extent, scale):

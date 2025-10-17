@@ -2,42 +2,41 @@
 from init_qgis import qgs, QgsLayoutExporter, QgsLayoutItemMap, QgsPrintLayout, QgsApplication, QgsProject, QgsMapSettings, QgsMapRendererParallelJob, QgsRasterFileWriter, QgsRectangle, QSize
 import sys
 
-
-def export_map_to_geotiff(project_path, output_path, extent, scale):
-    """
-    Exporte la carte d'un projet QGIS au format GeoTIFF.
-
-    :param project_path: Chemin vers le fichier .qgz ou .qgs
-    :param output_path: Chemin de sortie pour le GeoTIFF
-    :param extent: Emprise sous forme de tuple (xmin, ymin, xmax, ymax)
-    :param scale: Denominateur du facteur d'échelle
-    """
-    # Initialiser QGIS (nécessaire pour les scripts autonomes)
+def export_map(project_path, output_path, extent, scale):
     qgs = QgsApplication([], False)
     qgs.initQgis()
+    try:
+        project = QgsProject.instance()
+        print("Loading project...")
+        project.read(project_path)
+        if not project.isValid():
+            raise ValueError("Project is not valid")
 
-    # Charger le projet
-    project = QgsProject.instance()
-    project.read(project_path)
+        layout = QgsPrintLayout(project)
+        layout.initializeDefaults()
+        pc = layout.pageCollection()
+        pc.pages()[0].setPageSize('A4', QgsLayoutSize(QgsLayoutSize.Landscape))
 
-    # Créer un layout
-    layout = QgsPrintLayout(project)
-    layout.initializeDefaults()
+        map = QgsLayoutItemMap(layout)
+        map.setExtent(QgsRectangle(*extent))
+        map.setScale(scale)
+        map.attemptMove(QgsLayoutPoint(10, 10, QgsUnitTypes.LayoutMillimeters))
+        map.attemptResize(QgsLayoutSize(280, 180, QgsUnitTypes.LayoutMillimeters))
+        layout.addLayoutItem(map)
 
-    # Ajouter une carte au layout
-    map = QgsLayoutItemMap(layout)
-    map.setExtent(QgsRectangle(*extent))
-    map.setScale(scale)
-    layout.addLayoutItem(map)
+        settings = QgsLayoutExporter.ImageExportSettings()
+        settings.dpi = 300
 
-    # Exporter en GeoTIFF
-    exporter = QgsLayoutExporter(layout)
-    exporter.exportToImage(output_path, QgsLayoutExporter.ImageExportSettings())
+        print("Exporting...")
+        exporter = QgsLayoutExporter(layout)
+        exporter.exportToImage(output_path, settings)
+        print(f"Export terminé : {output_path}")
 
-    print(f"Export terminé : {output_path}")
-
-    qgs.exitQgis()
-
+    except Exception as e:
+        print(f"Error: {e}")
+        raise
+    finally:
+        qgs.exitQgis()
 
 '''
 scales = []
@@ -49,10 +48,9 @@ for i in range(5): #13
 print(scales)
 '''
 
-scale = 1000000
-# (xmin, ymin, xmax, ymax)
 extent = (3700000, 2700000, 3710000, 2710000)
-export_map_to_geotiff("src/project.qgz", "tmp/aaa.tiff", extent, scale)
+scale = 1000000
+export_map_to_geotiff("src/project.qgz", "tmp/aaa.png", extent, scale)
 
 
 

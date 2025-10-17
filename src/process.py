@@ -30,7 +30,7 @@ def export_map_to_geotiff(project_path, output_path, scale, extent):
     print(f"Export terminé : {output_path}")
 
 
-
+'''
 scales = []
 sca = 102400000
 for i in range(5): #13
@@ -38,6 +38,7 @@ for i in range(5): #13
     sca /= 2
 
 print(scales)
+'''
 
 scale = 1000000
 # (xmin, ymin, xmax, ymax)

@@ -50,7 +50,9 @@ print(scales)
 
 extent = (3700000, 2700000, 3710000, 2710000)
 scale = 1000000
-export_map("src/project.qgz", "tmp/aaa.png", extent, scale)
+proj = "/home/juju/Bureau/az.qgz"
+#proj = "src/project.qgz"
+export_map(proj, "tmp/aaa.png", extent, scale)
 
 
 

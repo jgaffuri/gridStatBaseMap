@@ -13,8 +13,9 @@ def export_map(project_path, output_path, extent, scale):
 
         layout = QgsPrintLayout(project)
         layout.initializeDefaults()
-        #pc = layout.pageCollection()
+        pc = layout.pageCollection()
         #pc.pages()[0].setPageSize('A4', QgsLayoutSize(QgsLayoutSize.Landscape))
+        pc.pages()[0].setPageSize('A4', QgsLayoutSize(width=100,height=100))
 
         map = QgsLayoutItemMap(layout)
         map.setExtent(QgsRectangle(*extent))

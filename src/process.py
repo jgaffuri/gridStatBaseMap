@@ -9,8 +9,7 @@ def export_map(project_path, output_path, extent, scale):
         project = QgsProject.instance()
         print("Loading project...")
         project.read(project_path)
-        if not project.isValid():
-            raise ValueError("Project is not valid")
+        #if not project.isValid(): raise ValueError("Project is not valid")
 
         layout = QgsPrintLayout(project)
         layout.initializeDefaults()

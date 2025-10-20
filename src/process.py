@@ -45,7 +45,7 @@ def generate_tiles(tiff, output_tiles_dir, zmin=0, zmax=10, profile = "EUR", crs
 qgz_path = "src/project.qgz"
 output_tif = "tmp/exported_map.tif"
 output_tiles_dir = "tmp/tiles/"
-extent = "2000000,1000000,7000000,5000000 [EPSG:3035]"
+extent = "3700000,2700000,3710000,2710000 [EPSG:3035]"
 
 export_map_qgis_to_geotiff(qgz_path, output_tif, extent, 8000, 6000, 300)
 generate_tiles(output_tif, output_tiles_dir)

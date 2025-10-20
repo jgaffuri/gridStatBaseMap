@@ -20,15 +20,15 @@ def export_map_qgis_to_geotiff(qgz_path, output_tif, extent, width, height, dpi)
         exit(1)
 
 
-def generate_tiles(tiff, output_tiles_dir):
+def generate_tiles(tiff, output_tiles_dir, zmin=0, zmax=10, profile = "EUR", crs = "EPSG:3035", processes=4):
     cmd = [
         "gdal2tiles.py",
-        "-p", "EUR",
+        "-p", profile,
         "--xyz",
-        "--zoom=0-10",
+        "--zoom="+str(zmin)+"-"+str(zmax),
         "-x",
-        "-s", "EPSG:3035",
-        "--processes=4",
+        "-s", crs,
+        "--processes="+str(processes),
         tiff,
         output_tiles_dir
     ]
@@ -42,9 +42,9 @@ def generate_tiles(tiff, output_tiles_dir):
 
 
 
-qgz_path = "/home/juju/Bureau/map.qgz"
-output_tif = "/home/juju/Bureau/gisco/map_background/exported_map.tif"
-output_tiles_dir = "/home/juju/Bureau/aaa/"
+qgz_path = "src/project.qgz"
+output_tif = "tmp/exported_map.tif"
+output_tiles_dir = "tmp/tiles/"
 extent = "2000000,1000000,7000000,5000000 [EPSG:3035]"
 
 export_map_qgis_to_geotiff(qgz_path, output_tif, extent, 8000, 6000, 300)

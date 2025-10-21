@@ -1,6 +1,6 @@
 import subprocess
 
-/home/juju/workspace/gridStatBaseMap/src/project.qgz
+#/home/juju/workspace/gridStatBaseMap/src/project.qgz
 '''
 qgis_process run native:exportmap \
   --input="/home/juju/workspace/gridStatBaseMap/src/project.qgz" \

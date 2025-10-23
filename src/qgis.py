@@ -1,20 +1,26 @@
 
+# see https://docs.qgis.org/3.40/en/docs/user_manual/processing_algs/qgis/rastertools.html#generate-xyz-tiles-directory
+#   --extent="3700000,2700000,3710000,2710000 [EPSG:3035]" \
+
 import processing
 
-# see https://docs.qgis.org/3.40/en/docs/user_manual/processing_algs/qgis/rastertools.html#generate-xyz-tiles-directory
-
-params = {"ANTIALIAS":True,
-          "BACKGROUND_COLOR":"rgba( 0, 0, 0, 0.00 )",
-          "DPI":96,
-          "EXTENT":"4438044.965100000,4441476.558800000,2780393.530700000,2784484.856900000 [EPSG:3035]",
-          "HTML_ATTRIBUTION":"",
-          "HTML_OSM":False,"HTML_TITLE":"","METATILESIZE":4,
+params = {
           "OUTPUT_DIRECTORY":"/home/juju/Bureau/tiles",
-          "OUTPUT_HTML":"","QUALITY":75,
-          "TILE_FORMAT":0,
+          "EXTENT":"3700000,2700000,3710000,2710000 [EPSG:3035]",
+          "ZOOM_MIN":5,
+          "ZOOM_MAX":10,
+          "DPI":96,
+          "ANTIALIAS":True,
           "TILE_HEIGHT":256,"TILE_WIDTH":256,
+          "TILE_FORMAT":0,
           "TMS_CONVENTION":False,
-          "ZOOM_MAX":12,"ZOOM_MIN":9
+          "BACKGROUND_COLOR":"rgba( 0, 0, 0, 0.00 )",
+          "HTML_ATTRIBUTION":"",
+          "HTML_OSM":False,
+          "HTML_TITLE":"",
+          "METATILESIZE":4,
+          "OUTPUT_HTML":"",
+          "QUALITY":75
           }
 processing.run("native:tilesxyzdirectory", params)
 

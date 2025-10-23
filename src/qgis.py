@@ -1,6 +1,5 @@
 
 # see https://docs.qgis.org/3.40/en/docs/user_manual/processing_algs/qgis/rastertools.html#generate-xyz-tiles-directory
-#   --extent="3700000,2700000,3710000,2710000 [EPSG:3035]" \
 
 import processing
 

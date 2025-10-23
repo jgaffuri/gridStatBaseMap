@@ -7,7 +7,8 @@ import processing
 params = {
           "OUTPUT_DIRECTORY":"/home/juju/Bureau/tiles",
           #Extent (xmin, xmax, ymin, ymax)
-          "EXTENT":"4300000,4400000,2700000,2800000 [EPSG:3035]",
+          #"EXTENT":"4300000,4400000,2700000,2800000 [EPSG:3035]",
+          "EXTENT":"900000,6600000,900000,5500000 [EPSG:3035]",
           "ZOOM_MIN":3,
           "ZOOM_MAX":12,
           "DPI":96,

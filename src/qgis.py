@@ -10,7 +10,7 @@ from PyQt5.QtCore import QSize
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
 xmin, ymin, xmax, ymax = 3700000, 2700000, 3800000, 2800000
-scale = 100000
+scale = 3200000
 size_px = 256
 
 # --- Build map settings ---
@@ -30,10 +30,12 @@ settings.setOutputSize(QSize(size_px, size_px))
 dpi = (scale * size_px * 0.0254) / (xmax-xmin)
 settings.setOutputDpi(dpi)
 
+print("scale",scale,"dpi",dpi)
+
 
 # --- Render to image ---
 image = QImage(size_px, size_px, QImage.Format_ARGB32)
-image.fill(Qt.white)
+#image.fill(Qt.white)
 
 p = QPainter(image)
 job = QgsMapRendererCustomPainterJob(settings, p)

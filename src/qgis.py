@@ -17,7 +17,7 @@ extent = QgsRectangle(xmin, ymin, xmax, ymax)
 scale = 1000000
 image_width = 256
 image_height = 256
-dpi = 300
+#dpi = 300
 
 # load project
 project = QgsProject.instance()
@@ -44,7 +44,7 @@ layout.addLayoutItem(map_item)
 # --- Export to PNG ---
 exporter = QgsLayoutExporter(layout)
 settings = QgsLayoutExporter.ImageExportSettings()
-settings.dpi = dpi
+#settings.dpi = dpi
 settings.width = image_width
 settings.height = image_height
 

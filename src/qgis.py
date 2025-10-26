@@ -11,10 +11,10 @@ from qgis.core import (
 from qgis.PyQt.QtCore import QSizeF
 import math
 
-output_path = "/home/juju/Bureau/export.png"
-xmin, ymin, xmax, ymax = 3700000,2700000,3710000,2710000
+output_path = "/home/juju/Bureau/tiles/export.png"
+xmin, ymin, xmax, ymax = 3700000, 2700000, 3800000, 2800000
 extent = QgsRectangle(xmin, ymin, xmax, ymax)
-scale = 100000
+scale = 1000000
 image_width = 256
 image_height = 256
 dpi = 300

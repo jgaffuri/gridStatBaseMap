@@ -1,4 +1,62 @@
+from qgis.core import (
+    QgsProject,
+    QgsLayoutExporter,
+    QgsLayoutItemMap,
+    QgsLayout,
+    QgsPrintLayout,
+    QgsRectangle
+)
+from qgis.PyQt.QtCore import QSizeF
+import math
 
+# --- Parameters ---
+output_path = "/path/to/output_map.png"
+
+# Define extent (square)
+xmin, ymin, xmax, ymax = 500000, 6500000, 501000, 6501000  # Example (1 km x 1 km)
+extent = QgsRectangle(xmin, ymin, xmax, ymax)
+
+scale = 5000             # e.g. 1:5000
+image_width = 1000       # in pixels
+image_height = 1000      # in pixels (square output)
+
+# --- Load project ---
+project = QgsProject.instance()
+
+# --- Create layout ---
+layout = QgsPrintLayout(project)
+layout.initializeDefaults()
+layout.setName("ExportLayout")
+
+# --- Add a map item ---
+map_item = QgsLayoutItemMap(layout)
+map_item.setRect(0, 0, 200, 200)
+
+# Set extent and scale
+map_item.setExtent(extent)
+map_item.setScale(scale)
+
+# Define map item size (in mm)
+# E.g., 100 mm × 100 mm square
+map_item.attemptMove(QgsLayoutPoint(5, 5))
+map_item.attemptResize(QgsLayoutSize(100, 100))
+layout.addLayoutItem(map_item)
+
+# --- Export to PNG ---
+exporter = QgsLayoutExporter(layout)
+settings = QgsLayoutExporter.ImageExportSettings()
+settings.dpi = 300
+settings.width = image_width
+settings.height = image_height
+
+result = exporter.exportToImage(output_path, settings)
+
+print(f"Export done → {output_path}, result code: {result}")
+
+
+
+
+'''
 # see https://docs.qgis.org/3.40/en/docs/user_manual/processing_algs/qgis/rastertools.html#generate-xyz-tiles-directory
 
 import processing
@@ -24,4 +82,4 @@ params = {
           "QUALITY":75
           }
 processing.run("native:tilesxyzdirectory", params)
-
+'''

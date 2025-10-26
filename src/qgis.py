@@ -17,7 +17,7 @@ size_m = (size_px * 0.0254 * scale) / dpi
 
 # define settings
 settings = QgsMapSettings()
-settings.setLayers(QgsProject.instance().mapLayers().values())
+#settings.setLayers(QgsProject.instance().mapLayers().values())
 #settings.setBackgroundColor(Qt.white)
 settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
 settings.setOutputSize(QSize(size_px, size_px))

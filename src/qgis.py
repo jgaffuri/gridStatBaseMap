@@ -1,5 +1,58 @@
 from qgis.core import (
     QgsProject,
+    QgsMapSettings,
+    QgsMapRendererCustomPainterJob,
+    QgsRectangle
+)
+from PyQt5.QtGui import QImage, QPainter
+from PyQt5.QtCore import QSize
+
+# --- Parameters ---
+output_path = "/home/juju/Bureau/tiles/export.png"
+xmin, ymin, xmax, ymax = 3700000, 2700000, 3800000, 2800000
+scale = 100000
+width_px = 256
+height_px = 256
+
+# --- Build map settings ---
+settings = QgsMapSettings()
+settings.setLayers(QgsProject.instance().mapLayers().values())
+#settings.setBackgroundColor(Qt.white)
+
+# Define extent
+extent = QgsRectangle(xmin, ymin, xmax, ymax)
+settings.setExtent(extent)
+
+# Set output size (in pixels)
+settings.setOutputSize(QSize(width_px, height_px))
+
+# Optionally fix scale
+#settings.setScale(scale)
+settings.setOutputDpi(96)
+
+
+# --- Render to image ---
+image = QImage(width_px, height_px, QImage.Format_ARGB32)
+image.fill(Qt.white)
+
+p = QPainter(image)
+job = QgsMapRendererCustomPainterJob(settings, p)
+job.start()
+job.waitForFinished()
+p.end()
+
+image.save(output_path, "PNG")
+
+
+
+
+
+'''
+# works ! with layout
+
+
+from qgis.core import (
+    QgsProject,
     QgsLayoutExporter,
     QgsLayoutItemMap,
     QgsLayout,
@@ -51,6 +104,8 @@ settings.height = image_height
 result = exporter.exportToImage(output_path, settings)
 
 print(f"Export done → {output_path}, result code: {result}")
+
+'''
 
 
 

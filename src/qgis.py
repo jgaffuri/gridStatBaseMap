@@ -9,29 +9,19 @@ from PyQt5.QtCore import QSize
 
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
-xmin, ymin, xmax, ymax = 3800000, 2700000, 3900000, 2800000
+xmin, ymin = 3800000, 2700000
 scale = 100000
+dpi = 96
 size_px = 256
+size_m = (size_px * 0.0254 * scale) / dpi
 
-# --- Build map settings ---
+# define settings
 settings = QgsMapSettings()
 settings.setLayers(QgsProject.instance().mapLayers().values())
 #settings.setBackgroundColor(Qt.white)
-
-# Define extent
-extent = QgsRectangle(xmin, ymin, xmax, ymax)
-settings.setExtent(extent)
-
-# Set output size (in pixels)
+settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
 settings.setOutputSize(QSize(size_px, size_px))
-
-# Optionally fix scale
-#settings.setScale(scale)
-dpi = (scale * size_px * 0.0254) / (xmax-xmin)
 settings.setOutputDpi(dpi)
-
-print("scale",scale,"dpi",dpi)
-
 
 # --- Render to image ---
 image = QImage(size_px, size_px, QImage.Format_ARGB32)

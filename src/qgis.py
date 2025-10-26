@@ -9,8 +9,8 @@ from PyQt5.QtCore import QSize
 
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
-xmin, ymin, xmax, ymax = 3700000, 2700000, 3800000, 2800000
-scale = 3200000
+xmin, ymin, xmax, ymax = 3800000, 2700000, 3900000, 2800000
+scale = 100000
 size_px = 256
 
 # --- Build map settings ---

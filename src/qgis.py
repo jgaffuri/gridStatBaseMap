@@ -12,7 +12,7 @@ output_path = "/home/juju/Bureau/tiles/export.png"
 xmin, ymin = 3800000, 2700000
 scale = 100000
 dpi = 96
-size_px = 256
+size_px = 10000
 size_m = (size_px * 0.0254 * scale) / dpi
 
 # define settings

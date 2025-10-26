@@ -3,24 +3,23 @@ from qgis.core import (
     QgsLayoutExporter,
     QgsLayoutItemMap,
     QgsLayout,
+    QgsLayoutPoint,
+    QgsLayoutSize,
     QgsPrintLayout,
     QgsRectangle
 )
 from qgis.PyQt.QtCore import QSizeF
 import math
 
-# --- Parameters ---
-output_path = "/path/to/output_map.png"
-
-# Define extent (square)
-xmin, ymin, xmax, ymax = 500000, 6500000, 501000, 6501000  # Example (1 km x 1 km)
+output_path = "/home/juju/Bureau/export.png"
+xmin, ymin, xmax, ymax = 3700000,2700000,3710000,2710000
 extent = QgsRectangle(xmin, ymin, xmax, ymax)
+scale = 100000
+image_width = 256
+image_height = 256
+dpi = 300
 
-scale = 5000             # e.g. 1:5000
-image_width = 1000       # in pixels
-image_height = 1000      # in pixels (square output)
-
-# --- Load project ---
+# load project
 project = QgsProject.instance()
 
 # --- Create layout ---
@@ -45,13 +44,14 @@ layout.addLayoutItem(map_item)
 # --- Export to PNG ---
 exporter = QgsLayoutExporter(layout)
 settings = QgsLayoutExporter.ImageExportSettings()
-settings.dpi = 300
+settings.dpi = dpi
 settings.width = image_width
 settings.height = image_height
 
 result = exporter.exportToImage(output_path, settings)
 
 print(f"Export done → {output_path}, result code: {result}")
+
 
 
 

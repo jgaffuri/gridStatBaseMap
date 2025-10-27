@@ -62,29 +62,23 @@ for z in range(0, 11):
     nb_tiles = nb_tiles0 * 2 ** z
     size_m = (size_px * 0.0254 * scale) / dpi
 
-    print("z=", z, "scale=", scale, "nb_tiles=", nb_tiles, "size_m=", size_m)
-
     # check
     sc = settings.computeExtentForScale(QgsPointXY(1000000,3000000), scale)
     ddd = size_m - sc.xMaximum()+sc.xMinimum()
     assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
     for j in range(nb_tiles):
-        f = output_folder + "/" + str(z) + "/" + str(j) + "/"
-        if not os.path.exists(f): os.makedirs(f)
-
         x = x0 + j*size_m
+
+        f = output_folder + "/" + str(z) + "/" + str(j) + "/"
+
+        print("z=", z, str(j) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
 
         for i in range(nb_tiles):
             y = y0 - (i+1)*size_m
 
+            # set image geo extent
             settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
-            #settings.setExtent(iface.mapCanvas().extent())
-
-            #settings.computeScaleForExtent()
-            #settings.computeExtentForScale
-            #settings.devicePixelRatio
-            #settings.setDevicePixelRatio
 
             # make image
             image = QImage(size_px, size_px, img_format)
@@ -96,10 +90,13 @@ for z in range(0, 11):
             job.waitForFinished()
             p.end()
 
-            if is_image_empty_np(image, white_threshold=254.999999999999):
-                #print("empty")
-                continue
+            # skip if map empty
+            if is_image_empty_np(image, white_threshold=254.999999999999): continue
 
+            # create folder
+            if not os.path.exists(f): os.makedirs(f)
+
+            # save image
             output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
             image.save(output_path, "PNG")
             output_path = f + str(i)+".png"

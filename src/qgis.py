@@ -52,35 +52,38 @@ settings.setLayers(visible_layers)
 
 
 # https://tile.aaa.org/{z}/{x}/{y}.png
-z = "z"
-[x0,y0] = [3946253, 2255080]
-for j in range(3):
-    x = x0 + j*size_m
-    f = output_folder + "/" + str(z) + "/" + str(j) + "/"
-    if not os.path.exists(f): os.makedirs(f)
-    for i in range(3):
-        y = y0 + i*size_m
+[x0,y0] = origin_point
+for z in range(0):
+    print(z)
+    for j in range(3):
+        f = output_folder + "/" + str(z) + "/" + str(j) + "/"
+        if not os.path.exists(f): os.makedirs(f)
 
-        settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
-        #settings.setExtent(iface.mapCanvas().extent())
+        x = x0 + j*size_m
 
-        #settings.computeScaleForExtent()
-        #settings.computeExtentForScale
-        #settings.devicePixelRatio
-        #settings.setDevicePixelRatio
+        for i in range(3):
+            y = y0 + i*size_m
 
-        # make image
-        image = QImage(size_px, size_px, img_format)
+            settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
+            #settings.setExtent(iface.mapCanvas().extent())
 
-        # paint image
-        p = QPainter(image)
-        job = QgsMapRendererCustomPainterJob(settings, p)
-        job.start()
-        job.waitForFinished()
-        p.end()
+            #settings.computeScaleForExtent()
+            #settings.computeExtentForScale
+            #settings.devicePixelRatio
+            #settings.setDevicePixelRatio
 
-        output_path = f + str(i)+".png"
-        image.save(output_path, "PNG")
+            # make image
+            image = QImage(size_px, size_px, img_format)
+
+            # paint image
+            p = QPainter(image)
+            job = QgsMapRendererCustomPainterJob(settings, p)
+            job.start()
+            job.waitForFinished()
+            p.end()
+
+            output_path = f + str(i)+".png"
+            image.save(output_path, "PNG")
 
 print("done")
 

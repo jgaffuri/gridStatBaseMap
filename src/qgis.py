@@ -33,9 +33,8 @@ settings.setOutputDpi(dpi)
 #settings.computeExtentForScale
 #settings.destinationCrs
 #settings.devicePixelRatio
-#settings.se
 
-settings.setLayers(QgsProject.instance().mapLayers().values())
+settings.setLayers(project.mapLayers().values())
 
 
 # --- Render to image ---

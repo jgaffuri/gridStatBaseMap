@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from datetime import datetime
 from qgis.core import (
     QgsProject,
     QgsMapSettings,
@@ -67,7 +68,7 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
             # output folder
             f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
-            print("z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
+            print(datetime.now(), "z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
 
             for i in range(nb_tiles):
                 y = y0 - (i+1)*size_m

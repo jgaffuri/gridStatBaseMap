@@ -21,19 +21,23 @@ def is_image_empty_np(image, white_threshold=254):
     ptr.setsize(image.byteCount())
     arr = np.frombuffer(ptr, np.uint8).reshape(image.height(), image.width(), 4)
     mean_value = arr[..., :3].mean()  # average RGB
-    return mean_value > white_threshold
+    return mean_value >= white_threshold
 
 
 # --- Parameters ---
 output_folder = "/home/juju/Bureau/tiles/"
-#origin_point = [3946253, 2255080]
-#scale = 25000
 origin_point = [0, 6000000]
 scale0 = 102400000
+nb_tiles0 = 1
 size_px = 256
+z_min = 0
+z_max = 10
+img_format = QImage.Format_ARGB32
+skip_white_image = True
+
 dpi = 96
 
-# get current projetc
+# get current project
 project = QgsProject.instance()
 
 # set map settings
@@ -42,7 +46,6 @@ settings.setDestinationCrs(project.crs())
 settings.setBackgroundColor(iface.mapCanvas().canvasColor())
 settings.setOutputSize(QSize(size_px, size_px))
 settings.setOutputDpi(dpi)
-img_format = QImage.Format_ARGB32
 
 # get layers: only the visible ones
 layer_tree = project.layerTreeRoot()
@@ -55,21 +58,21 @@ settings.setLayers(visible_layers)
 
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
-nb_tiles0 = 1
-for z in range(0, 11):
+for z in range(z_min, z_max+1):
 
     scale = scale0 / 2 ** z
     nb_tiles = nb_tiles0 * 2 ** z
     size_m = (size_px * 0.0254 * scale) / dpi
 
     # check
-    sc = settings.computeExtentForScale(QgsPointXY(1000000,3000000), scale)
+    sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
     ddd = size_m - sc.xMaximum()+sc.xMinimum()
     assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
     for j in range(nb_tiles):
         x = x0 + j*size_m
 
+        # output folder
         f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
         print("z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
@@ -91,14 +94,15 @@ for z in range(0, 11):
             p.end()
 
             # skip if map empty
-            if is_image_empty_np(image, white_threshold=254.999999999999): continue
+            #TODO test: should work with 255
+            if skip_white_image and is_image_empty_np(image, white_threshold=254.999999999999): continue
 
-            # create folder
+            # create folder, if needed
             if not os.path.exists(f): os.makedirs(f)
 
             # save image
-            output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
-            image.save(output_path, "PNG")
+            #output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
+            #image.save(output_path, "PNG")
             output_path = f + str(i)+".png"
             image.save(output_path, "PNG")
 

@@ -6,12 +6,12 @@ from qgis.core import (
 )
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QSize
-
+from qgis.utils import iface
 
 project = QgsProject.instance()
 crs = project.crs()
 #print(f"Project CRS: {crs.authid()}")
-  
+
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
 xmin, ymin = 3946253, 2255080
@@ -25,7 +25,9 @@ size_m = (size_px * 0.0254 * scale) / dpi
 settings = QgsMapSettings()
 settings.setDestinationCrs(crs)
 #settings.setBackgroundColor(Qt.white)
+#settings.setBackgroundColor(iface.mapCanvas().canvasColor())
 settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
+#settings.setExtent(iface.mapCanvas().extent())
 settings.setOutputSize(QSize(size_px, size_px))
 settings.setOutputDpi(dpi)
 #settings.setDevicePixelRatio
@@ -34,7 +36,15 @@ settings.setOutputDpi(dpi)
 #settings.destinationCrs
 #settings.devicePixelRatio
 
-settings.setLayers(project.mapLayers().values())
+
+# Use only visible layers in correct order
+layer_tree = project.layerTreeRoot()
+visible_layers = [
+    layer.layer()
+    for layer in layer_tree.layerOrder()
+    if layer.isVisible()
+]
+settings.setLayers(visible_layers)
 
 
 # --- Render to image ---

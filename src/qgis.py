@@ -72,7 +72,7 @@ for z in range(0, 11):
 
         f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
-        print("z=", z, str(j) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
+        print("z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
 
         for i in range(nb_tiles):
             y = y0 - (i+1)*size_m

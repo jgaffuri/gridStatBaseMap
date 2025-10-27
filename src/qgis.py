@@ -45,7 +45,7 @@ for i in range(5):
     xmin_ = xmin
     ymin_ = ymin + i*size_m
 
-    settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
+    settings.setExtent(QgsRectangle(xmin_, ymin_, xmin_+size_m, ymin_+size_m))
     #settings.setExtent(iface.mapCanvas().extent())
     #settings.computeScaleForExtent
     #settings.computeExtentForScale

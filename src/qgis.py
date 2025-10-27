@@ -1,3 +1,4 @@
+import os
 from qgis.core import (
     QgsProject,
     QgsMapSettings,
@@ -8,8 +9,6 @@ from qgis.core import (
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QSize
 from qgis.utils import iface
-
-
 
 
 
@@ -52,11 +51,13 @@ visible_layers = [
 settings.setLayers(visible_layers)
 
 
-
-
+# https://tile.aaa.org/{z}/{x}/{y}.png
+z = "z"
 [x0,y0] = [3946253, 2255080]
 for j in range(3):
     x = x0 + j*size_m
+    f = output_folder + "/" + str(z) + "/" + str(j) + "/"
+    if not os.path.exists(f): os.makedirs(f)
     for i in range(3):
         y = y0 + i*size_m
 
@@ -78,7 +79,7 @@ for j in range(3):
         job.waitForFinished()
         p.end()
 
-        output_path = output_folder + str(i) + str(j)+".png"
+        output_path = f + str(i)+".png"
         image.save(output_path, "PNG")
 
 print("done")

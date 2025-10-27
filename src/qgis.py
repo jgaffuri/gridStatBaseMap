@@ -10,6 +10,19 @@ from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QSize
 from qgis.utils import iface
 
+import numpy as np
+
+def is_image_empty_np(image, white_threshold=254):
+    """
+    Checks if image is almost white everywhere.
+    white_threshold: 0-255 value — higher means more lenient.
+    """
+    ptr = image.bits()
+    ptr.setsize(image.byteCount())
+    arr = np.frombuffer(ptr, np.uint8).reshape(image.height(), image.width(), 4)
+    mean_value = arr[..., :3].mean()  # average RGB
+    return mean_value > white_threshold
+
 
 # --- Parameters ---
 output_folder = "/home/juju/Bureau/tiles/"
@@ -43,7 +56,7 @@ settings.setLayers(visible_layers)
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
 nb_tiles0 = 1
-for z in range(3,4):
+for z in range(3, 6):
 
     scale = scale0 / 2 ** z
     nb_tiles = nb_tiles0 * 2 ** z
@@ -83,9 +96,14 @@ for z in range(3,4):
             job.waitForFinished()
             p.end()
 
-            #output_path = f + str(i)+".png"
+            if is_image_empty_np(image):
+                print("empty")
+                continue
+
             output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
             image.save(output_path, "PNG")
+            #output_path = f + str(i)+".png"
+            #image.save(output_path, "PNG")
 
 print("done")
 

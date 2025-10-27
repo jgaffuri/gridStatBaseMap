@@ -16,7 +16,7 @@ crs = project.crs()
 output_path = "/home/juju/Bureau/tiles/export.png"
 xmin, ymin = 3946253, 2255080
 #xmin, ymin = 0, 0
-scale = 100000
+scale = 25000
 dpi = 96
 size_px = 256
 size_m = (size_px * 0.0254 * scale) / dpi
@@ -24,8 +24,7 @@ size_m = (size_px * 0.0254 * scale) / dpi
 # define settings
 settings = QgsMapSettings()
 settings.setDestinationCrs(crs)
-#settings.setBackgroundColor(Qt.white)
-#settings.setBackgroundColor(iface.mapCanvas().canvasColor())
+settings.setBackgroundColor(iface.mapCanvas().canvasColor())
 settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
 #settings.setExtent(iface.mapCanvas().extent())
 settings.setOutputSize(QSize(size_px, size_px))

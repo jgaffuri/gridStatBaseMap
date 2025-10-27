@@ -10,7 +10,7 @@ from qgis.utils import iface
 
 
 # --- Parameters ---
-output_path = "/home/juju/Bureau/tiles/export.png"
+output_folder = "/home/juju/Bureau/tiles/"
 xmin, ymin = 3946253, 2255080
 scale = 25000
 size_px = 256
@@ -26,17 +26,8 @@ project = QgsProject.instance()
 settings = QgsMapSettings()
 settings.setDestinationCrs(project.crs())
 settings.setBackgroundColor(iface.mapCanvas().canvasColor())
-settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
-#settings.setExtent(iface.mapCanvas().extent())
 settings.setOutputSize(QSize(size_px, size_px))
 settings.setOutputDpi(dpi)
-#settings.computeScaleForExtent
-#settings.computeExtentForScale
-#settings.devicePixelRatio
-#settings.setDevicePixelRatio
-
-print()
-
 
 # get layers: only the visible ones
 layer_tree = project.layerTreeRoot()
@@ -48,17 +39,32 @@ visible_layers = [
 settings.setLayers(visible_layers)
 
 
-# make image
-image = QImage(size_px, size_px, img_format)
 
-# paint image
-p = QPainter(image)
-job = QgsMapRendererCustomPainterJob(settings, p)
-job.start()
-job.waitForFinished()
-p.end()
+for i in range(5):
+    print(i)
+    xmin_ = xmin
+    ymin_ = ymin + i*size_m
 
-image.save(output_path, "PNG")
+    settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
+    #settings.setExtent(iface.mapCanvas().extent())
+    #settings.computeScaleForExtent
+    #settings.computeExtentForScale
+    #settings.devicePixelRatio
+    #settings.setDevicePixelRatio
+
+
+    # make image
+    image = QImage(size_px, size_px, img_format)
+
+    # paint image
+    p = QPainter(image)
+    job = QgsMapRendererCustomPainterJob(settings, p)
+    job.start()
+    job.waitForFinished()
+    p.end()
+
+    output_path = output_folder + str(i)+".png"
+    image.save(output_path, "PNG")
 
 print("done")
 

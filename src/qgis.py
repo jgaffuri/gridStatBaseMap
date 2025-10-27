@@ -10,10 +10,15 @@ from PyQt5.QtCore import QSize
 from qgis.utils import iface
 
 
+
+
+
 # --- Parameters ---
 output_folder = "/home/juju/Bureau/tiles/"
-xmin, ymin = 3946253, 2255080
-scale = 102400000
+origin_point = [3946253, 2255080]
+scale = 25000
+#origin_point = [0, 6000000]
+#scale = 102400000
 size_px = 256
 dpi = 96
 size_m = (size_px * 0.0254 * scale) / dpi
@@ -49,31 +54,32 @@ settings.setLayers(visible_layers)
 
 
 
-for i in range(3):
-    xmin_ = xmin
-    ymin_ = ymin + i*size_m
+[x0,y0] = [3946253, 2255080]
+for j in range(3):
+    x = x0 + j*size_m
+    for i in range(3):
+        y = y0 + i*size_m
 
-    settings.setExtent(QgsRectangle(xmin_, ymin_, xmin_+size_m, ymin_+size_m))
-    #settings.setExtent(iface.mapCanvas().extent())
+        settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
+        #settings.setExtent(iface.mapCanvas().extent())
 
-    #settings.computeScaleForExtent()
-    #settings.computeExtentForScale
-    #settings.devicePixelRatio
-    #settings.setDevicePixelRatio
+        #settings.computeScaleForExtent()
+        #settings.computeExtentForScale
+        #settings.devicePixelRatio
+        #settings.setDevicePixelRatio
 
+        # make image
+        image = QImage(size_px, size_px, img_format)
 
-    # make image
-    image = QImage(size_px, size_px, img_format)
+        # paint image
+        p = QPainter(image)
+        job = QgsMapRendererCustomPainterJob(settings, p)
+        job.start()
+        job.waitForFinished()
+        p.end()
 
-    # paint image
-    p = QPainter(image)
-    job = QgsMapRendererCustomPainterJob(settings, p)
-    job.start()
-    job.waitForFinished()
-    p.end()
-
-    output_path = output_folder + str(i)+".png"
-    image.save(output_path, "PNG")
+        output_path = output_folder + str(i) + str(j)+".png"
+        image.save(output_path, "PNG")
 
 print("done")
 

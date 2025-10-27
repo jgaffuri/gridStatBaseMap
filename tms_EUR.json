@@ -150,6 +150,16 @@
           "tileHeight": 256,
           "matrixWidth": 32768,
           "matrixHeight": 32768
+     },
+     {
+          "type": "TileMatrixType",
+          "identifier": "13",
+          "scaleDenominator": 6250,
+          "topLeftCorner": [6000000, 0],
+          "tileWidth": 256,
+          "tileHeight": 256,
+          "matrixWidth": 65536,
+          "matrixHeight": 65536
      }
      ]
  }

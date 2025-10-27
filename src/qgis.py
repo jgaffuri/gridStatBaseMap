@@ -56,7 +56,7 @@ settings.setLayers(visible_layers)
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
 nb_tiles0 = 1
-for z in range(3, 6):
+for z in range(3, 8):
 
     scale = scale0 / 2 ** z
     nb_tiles = nb_tiles0 * 2 ** z
@@ -96,80 +96,16 @@ for z in range(3, 6):
             job.waitForFinished()
             p.end()
 
-            if is_image_empty_np(image, white_threshold=255):
-                print("empty")
+            if is_image_empty_np(image, white_threshold=254.999999999999):
+                #print("empty")
                 continue
 
             output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
             image.save(output_path, "PNG")
-            #output_path = f + str(i)+".png"
-            #image.save(output_path, "PNG")
+            output_path = f + str(i)+".png"
+            image.save(output_path, "PNG")
 
 print("done")
-
-
-
-'''
-# works ! with layout
-
-
-from qgis.core import (
-    QgsProject,
-    QgsLayoutExporter,
-    QgsLayoutItemMap,
-    QgsLayout,
-    QgsLayoutPoint,
-    QgsLayoutSize,
-    QgsPrintLayout,
-    QgsRectangle
-)
-from qgis.PyQt.QtCore import QSizeF
-import math
-
-output_path = "/home/juju/Bureau/tiles/export.png"
-xmin, ymin, xmax, ymax = 3700000, 2700000, 3800000, 2800000
-extent = QgsRectangle(xmin, ymin, xmax, ymax)
-scale = 1000000
-image_width = 256
-image_height = 256
-#dpi = 300
-
-# load project
-project = QgsProject.instance()
-
-# --- Create layout ---
-layout = QgsPrintLayout(project)
-layout.initializeDefaults()
-layout.setName("ExportLayout")
-
-# --- Add a map item ---
-map_item = QgsLayoutItemMap(layout)
-map_item.setRect(0, 0, 200, 200)
-
-# Set extent and scale
-map_item.setExtent(extent)
-map_item.setScale(scale)
-
-# Define map item size (in mm)
-# E.g., 100 mm × 100 mm square
-map_item.attemptMove(QgsLayoutPoint(5, 5))
-map_item.attemptResize(QgsLayoutSize(100, 100))
-layout.addLayoutItem(map_item)
-
-# --- Export to PNG ---
-exporter = QgsLayoutExporter(layout)
-settings = QgsLayoutExporter.ImageExportSettings()
-#settings.dpi = dpi
-settings.width = image_width
-settings.height = image_height
-
-result = exporter.exportToImage(output_path, settings)
-
-print(f"Export done → {output_path}, result code: {result}")
-
-'''
-
-
 
 
 

@@ -42,7 +42,7 @@ settings.setLayers(visible_layers)
 
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
-nb_tiles0 = 1
+nb_tiles0 = 3
 for z in range(1):
     print(z)
 
@@ -62,7 +62,7 @@ for z in range(1):
         x = x0 + j*size_m
 
         for i in range(nb_tiles):
-            y = y0 + i*size_m
+            y = y0 - (i+1)*size_m
 
             settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
             #settings.setExtent(iface.mapCanvas().extent())

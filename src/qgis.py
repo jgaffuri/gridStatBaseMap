@@ -42,8 +42,8 @@ settings.setLayers(visible_layers)
 
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
-nb_tiles0 = 10
-for z in range(1):
+nb_tiles0 = 1
+for z in range(3,4):
 
     scale = scale0 / 2 ** z
     nb_tiles = nb_tiles0 * 2 ** z

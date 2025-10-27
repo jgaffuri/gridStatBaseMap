@@ -42,13 +42,14 @@ settings.setLayers(visible_layers)
 
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
-nb_tiles0 = 3
+nb_tiles0 = 10
 for z in range(1):
-    print(z)
 
     scale = scale0 / 2 ** z
     nb_tiles = nb_tiles0 * 2 ** z
     size_m = (size_px * 0.0254 * scale) / dpi
+
+    print(z, scale, nb_tiles, size_m)
 
     # check
     sc = settings.computeExtentForScale(QgsPointXY(1000000,3000000), scale)

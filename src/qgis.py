@@ -33,7 +33,8 @@ settings.setOutputDpi(dpi)
 
 # check
 sc = settings.computeExtentForScale(QgsPointXY(1000000,3000000), scale)
-assert size_m - sc.xMaximum()-sc.xMinimum() < 1e-8, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
+ddd = size_m - sc.xMaximum()+sc.xMinimum()
+assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
 
 # get layers: only the visible ones

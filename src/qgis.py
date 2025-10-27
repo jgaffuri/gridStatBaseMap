@@ -96,7 +96,7 @@ for z in range(3, 6):
             job.waitForFinished()
             p.end()
 
-            if is_image_empty_np(image):
+            if is_image_empty_np(image, white_threshold=255):
                 print("empty")
                 continue
 

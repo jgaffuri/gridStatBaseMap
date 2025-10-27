@@ -12,10 +12,9 @@ from qgis.utils import iface
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
 xmin, ymin = 3946253, 2255080
-#xmin, ymin = 0, 0
 scale = 25000
-dpi = 96
 size_px = 256
+dpi = 96
 size_m = (size_px * 0.0254 * scale) / dpi
 img_format = QImage.Format_ARGB32
 

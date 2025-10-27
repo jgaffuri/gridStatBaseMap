@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from qgis.core import (
     QgsProject,
     QgsMapSettings,
@@ -10,101 +11,100 @@ from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QSize
 from qgis.utils import iface
 
-import numpy as np
 
-def is_image_empty_np(image, white_threshold=254):
-    """
-    Checks if image is almost white everywhere.
-    white_threshold: 0-255 value — higher means more lenient.
-    """
-    ptr = image.bits()
-    ptr.setsize(image.byteCount())
-    arr = np.frombuffer(ptr, np.uint8).reshape(image.height(), image.width(), 4)
-    mean_value = arr[..., :3].mean()  # average RGB
-    return mean_value >= white_threshold
+def tile_from_qgis_project(output_folder, origin_point = [0, 0],
+                           z_min=0, z_max=3,
+                           scale0 = 102400000, nb_tiles0 = 1,
+                           size_px = 256, dpi = 96, img_format = QImage.Format_ARGB32, skip_white_image = True):
+
+    def is_image_empty_np(image, white_threshold=254):
+        """
+        Checks if image is almost white everywhere.
+        white_threshold: 0-255 value — higher means more lenient.
+        """
+        ptr = image.bits()
+        ptr.setsize(image.byteCount())
+        arr = np.frombuffer(ptr, np.uint8).reshape(image.height(), image.width(), 4)
+        mean_value = arr[..., :3].mean()  # average RGB
+        return mean_value >= white_threshold
 
 
-# --- Parameters ---
-output_folder = "/home/juju/Bureau/tiles/"
-origin_point = [0, 6000000]
-scale0 = 102400000
-nb_tiles0 = 1
-size_px = 256
-z_min = 0
-z_max = 10
-img_format = QImage.Format_ARGB32
-skip_white_image = True
+    # get current project
+    project = QgsProject.instance()
 
-dpi = 96
+    # set map settings
+    settings = QgsMapSettings()
+    settings.setDestinationCrs(project.crs())
+    settings.setBackgroundColor(iface.mapCanvas().canvasColor())
+    settings.setOutputSize(QSize(size_px, size_px))
+    settings.setOutputDpi(dpi)
 
-# get current project
-project = QgsProject.instance()
+    # get layers: only the visible ones
+    layer_tree = project.layerTreeRoot()
+    ordered_layers = layer_tree.layerOrder()
+    visible_layers = [
+        lyr for lyr in ordered_layers
+        if layer_tree.findLayer(lyr.id()).isVisible()
+    ]
+    settings.setLayers(visible_layers)
 
-# set map settings
-settings = QgsMapSettings()
-settings.setDestinationCrs(project.crs())
-settings.setBackgroundColor(iface.mapCanvas().canvasColor())
-settings.setOutputSize(QSize(size_px, size_px))
-settings.setOutputDpi(dpi)
+    # https://tile.aaa.org/{z}/{x}/{y}.png
+    [x0,y0] = origin_point
+    for z in range(z_min, z_max+1):
 
-# get layers: only the visible ones
-layer_tree = project.layerTreeRoot()
-ordered_layers = layer_tree.layerOrder()
-visible_layers = [
-    lyr for lyr in ordered_layers
-    if layer_tree.findLayer(lyr.id()).isVisible()
-]
-settings.setLayers(visible_layers)
+        scale = scale0 / 2 ** z
+        nb_tiles = nb_tiles0 * 2 ** z
+        size_m = (size_px * 0.0254 * scale) / dpi
 
-# https://tile.aaa.org/{z}/{x}/{y}.png
-[x0,y0] = origin_point
-for z in range(z_min, z_max+1):
+        # check
+        sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
+        ddd = size_m - sc.xMaximum()+sc.xMinimum()
+        assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
-    scale = scale0 / 2 ** z
-    nb_tiles = nb_tiles0 * 2 ** z
-    size_m = (size_px * 0.0254 * scale) / dpi
+        for j in range(nb_tiles):
+            x = x0 + j*size_m
 
-    # check
-    sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
-    ddd = size_m - sc.xMaximum()+sc.xMinimum()
-    assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
+            # output folder
+            f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
-    for j in range(nb_tiles):
-        x = x0 + j*size_m
+            print("z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
 
-        # output folder
-        f = output_folder + "/" + str(z) + "/" + str(j) + "/"
+            for i in range(nb_tiles):
+                y = y0 - (i+1)*size_m
 
-        print("z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
+                # set image geo extent
+                settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
 
-        for i in range(nb_tiles):
-            y = y0 - (i+1)*size_m
+                # make image
+                image = QImage(size_px, size_px, img_format)
 
-            # set image geo extent
-            settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
+                # paint image
+                p = QPainter(image)
+                job = QgsMapRendererCustomPainterJob(settings, p)
+                job.start()
+                job.waitForFinished()
+                p.end()
 
-            # make image
-            image = QImage(size_px, size_px, img_format)
+                # skip if map empty
+                #TODO test: should work with 255
+                if skip_white_image and is_image_empty_np(image, white_threshold=254.999999999999): continue
 
-            # paint image
-            p = QPainter(image)
-            job = QgsMapRendererCustomPainterJob(settings, p)
-            job.start()
-            job.waitForFinished()
-            p.end()
+                # create folder, if needed
+                if not os.path.exists(f): os.makedirs(f)
 
-            # skip if map empty
-            #TODO test: should work with 255
-            if skip_white_image and is_image_empty_np(image, white_threshold=254.999999999999): continue
+                # save image
+                #output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
+                #image.save(output_path, "PNG")
+                output_path = f + str(i)+".png"
+                image.save(output_path, "PNG")
 
-            # create folder, if needed
-            if not os.path.exists(f): os.makedirs(f)
 
-            # save image
-            #output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
-            #image.save(output_path, "PNG")
-            output_path = f + str(i)+".png"
-            image.save(output_path, "PNG")
+
+tile_from_qgis_project(output_folder = "/home/juju/Bureau/tiles/",
+    origin_point = [0, 6000000],
+    z_min = 9,
+    z_max = 12,
+)
 
 print("done")
 

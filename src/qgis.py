@@ -53,7 +53,7 @@ settings.setLayers(visible_layers)
 
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
-for z in range(0):
+for z in range(1):
     print(z)
     for j in range(3):
         f = output_folder + "/" + str(z) + "/" + str(j) + "/"

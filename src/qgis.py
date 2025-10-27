@@ -11,14 +11,14 @@ from PyQt5.QtCore import QSize
 project = QgsProject.instance()
 crs = project.crs()
 #print(f"Project CRS: {crs.authid()}")
-
+  
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
-xmin, ymin = 3946753, 2255519
+xmin, ymin = 3946253, 2255080
 #xmin, ymin = 0, 0
 scale = 1000000
 dpi = 96
-size_px = 1000
+size_px = 256
 size_m = (size_px * 0.0254 * scale) / dpi
 
 # define settings

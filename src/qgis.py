@@ -2,7 +2,8 @@ from qgis.core import (
     QgsProject,
     QgsMapSettings,
     QgsMapRendererCustomPainterJob,
-    QgsRectangle
+    QgsRectangle,
+    QgsPointXY
 )
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QSize
@@ -12,11 +13,12 @@ from qgis.utils import iface
 # --- Parameters ---
 output_folder = "/home/juju/Bureau/tiles/"
 xmin, ymin = 3946253, 2255080
-scale = 25000
+scale = 6400000
 size_px = 256
 dpi = 96
 size_m = (size_px * 0.0254 * scale) / dpi
 img_format = QImage.Format_ARGB32
+
 
 
 # current projetc
@@ -29,6 +31,11 @@ settings.setBackgroundColor(iface.mapCanvas().canvasColor())
 settings.setOutputSize(QSize(size_px, size_px))
 settings.setOutputDpi(dpi)
 
+# check
+sc = settings.computeExtentForScale(QgsPointXY(1000000,3000000), scale)
+assert size_m - sc.xMaximum()-sc.xMinimum() < 1e-8, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
+
+
 # get layers: only the visible ones
 layer_tree = project.layerTreeRoot()
 ordered_layers = layer_tree.layerOrder()
@@ -40,14 +47,15 @@ settings.setLayers(visible_layers)
 
 
 
+
 for i in range(5):
-    print(i)
     xmin_ = xmin
     ymin_ = ymin + i*size_m
 
     settings.setExtent(QgsRectangle(xmin_, ymin_, xmin_+size_m, ymin_+size_m))
     #settings.setExtent(iface.mapCanvas().extent())
-    #settings.computeScaleForExtent
+
+    #settings.computeScaleForExtent()
     #settings.computeExtentForScale
     #settings.devicePixelRatio
     #settings.setDevicePixelRatio

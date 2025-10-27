@@ -42,10 +42,12 @@ settings.setLayers(visible_layers)
 
 # https://tile.aaa.org/{z}/{x}/{y}.png
 [x0,y0] = origin_point
+nb_tiles0 = 1
 for z in range(1):
     print(z)
 
     scale = scale0 / 2 ** z
+    nb_tiles = nb_tiles0 * 2 ** z
     size_m = (size_px * 0.0254 * scale) / dpi
 
     # check
@@ -53,13 +55,13 @@ for z in range(1):
     ddd = size_m - sc.xMaximum()+sc.xMinimum()
     assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
-    for j in range(3):
+    for j in range(nb_tiles):
         f = output_folder + "/" + str(z) + "/" + str(j) + "/"
         if not os.path.exists(f): os.makedirs(f)
 
         x = x0 + j*size_m
 
-        for i in range(3):
+        for i in range(nb_tiles):
             y = y0 + i*size_m
 
             settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))

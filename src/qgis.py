@@ -8,9 +8,14 @@ from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QSize
 
 
+project = QgsProject.instance()
+crs = project.crs()
+print(f"Project CRS: {crs.authid()}")  # Should print "EPSG:3035"
+
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
-xmin, ymin = 3946753, 2255519
+#xmin, ymin = 3946753, 2255519
+xmin, ymin = 0, 0
 scale = 1000000
 dpi = 96
 size_px = 10000
@@ -18,11 +23,19 @@ size_m = (size_px * 0.0254 * scale) / dpi
 
 # define settings
 settings = QgsMapSettings()
+settings.setDestinationCrs(crs)
 settings.setLayers(QgsProject.instance().mapLayers().values())
 #settings.setBackgroundColor(Qt.white)
 settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
 settings.setOutputSize(QSize(size_px, size_px))
 settings.setOutputDpi(dpi)
+#settings.setDevicePixelRatio
+#settings.computeScaleForExtent
+#settings.computeExtentForScale
+settings.destinationCrs
+settings.devicePixelRatio
+#settings.se
+
 
 # --- Render to image ---
 image = QImage(size_px, size_px, QImage.Format_ARGB32)

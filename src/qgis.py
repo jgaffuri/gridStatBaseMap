@@ -37,12 +37,13 @@ settings.setOutputDpi(dpi)
 #settings.devicePixelRatio
 
 
-# Use only visible layers in correct order
-layer_tree = project.layerTreeRoot()
+layer_tree = QgsProject.instance().layerTreeRoot()
+# Get layers in the same order as the Layer Panel (top → bottom)
+ordered_layers = layer_tree.layerOrder()
+# Keep only those that are visible
 visible_layers = [
-    layer.layer()
-    for layer in layer_tree.layerOrder()
-    if layer.isVisible()
+    lyr for lyr in ordered_layers
+    if layer_tree.findLayer(lyr.id()).isVisible()
 ]
 settings.setLayers(visible_layers)
 

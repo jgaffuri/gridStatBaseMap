@@ -8,9 +8,6 @@ from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QSize
 from qgis.utils import iface
 
-project = QgsProject.instance()
-crs = project.crs()
-#print(f"Project CRS: {crs.authid()}")
 
 # --- Parameters ---
 output_path = "/home/juju/Bureau/tiles/export.png"
@@ -20,26 +17,31 @@ scale = 25000
 dpi = 96
 size_px = 256
 size_m = (size_px * 0.0254 * scale) / dpi
+img_format = QImage.Format_ARGB32
 
-# define settings
+
+# current projetc
+project = QgsProject.instance()
+
+# set map settings
 settings = QgsMapSettings()
-settings.setDestinationCrs(crs)
+settings.setDestinationCrs(project.crs())
 settings.setBackgroundColor(iface.mapCanvas().canvasColor())
 settings.setExtent(QgsRectangle(xmin, ymin, xmin+size_m, ymin+size_m))
 #settings.setExtent(iface.mapCanvas().extent())
 settings.setOutputSize(QSize(size_px, size_px))
 settings.setOutputDpi(dpi)
-#settings.setDevicePixelRatio
 #settings.computeScaleForExtent
 #settings.computeExtentForScale
-#settings.destinationCrs
 #settings.devicePixelRatio
+#settings.setDevicePixelRatio
+
+print()
 
 
-layer_tree = QgsProject.instance().layerTreeRoot()
-# Get layers in the same order as the Layer Panel (top → bottom)
+# get layers: only the visible ones
+layer_tree = project.layerTreeRoot()
 ordered_layers = layer_tree.layerOrder()
-# Keep only those that are visible
 visible_layers = [
     lyr for lyr in ordered_layers
     if layer_tree.findLayer(lyr.id()).isVisible()
@@ -47,10 +49,10 @@ visible_layers = [
 settings.setLayers(visible_layers)
 
 
-# --- Render to image ---
-image = QImage(size_px, size_px, QImage.Format_ARGB32)
-#image.fill(Qt.white)
+# make image
+image = QImage(size_px, size_px, img_format)
 
+# paint image
 p = QPainter(image)
 job = QgsMapRendererCustomPainterJob(settings, p)
 job.start()

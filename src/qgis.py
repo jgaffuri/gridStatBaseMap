@@ -13,7 +13,7 @@ from qgis.utils import iface
 # --- Parameters ---
 output_folder = "/home/juju/Bureau/tiles/"
 xmin, ymin = 3946253, 2255080
-scale = 6400000
+scale = 102400000
 size_px = 256
 dpi = 96
 size_m = (size_px * 0.0254 * scale) / dpi
@@ -21,7 +21,7 @@ img_format = QImage.Format_ARGB32
 
 
 
-# current projetc
+# get current projetc
 project = QgsProject.instance()
 
 # set map settings
@@ -48,7 +48,7 @@ settings.setLayers(visible_layers)
 
 
 
-for i in range(5):
+for i in range(3):
     xmin_ = xmin
     ymin_ = ymin + i*size_m
 

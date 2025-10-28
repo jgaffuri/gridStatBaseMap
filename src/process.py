@@ -139,7 +139,7 @@ tile_from_qgis_project(
     scale0 = 51200000, nb_tiles0 = 1, tile_size_px = 512,
     z_min = 0,
     z_max = 10,
-    img_format=QImage.Format_Grayscale16,
+    img_format = QImage.Format_Grayscale16,
 )
 
 # close

@@ -14,14 +14,16 @@ from qgis.utils import iface
 
 
 # change to pixel 
-#DPI=ground resolution (m/px)0.0254​
-
+#DPI=ground resolution (m/px) / 0.0254​
+# PixelSize=ScaleDenominator×0.00028
+# Tile size in map units=tileWidth×pixelSize
+# 90.714 DPI
 
 
 def tile_from_qgis_project(output_folder, origin_point = [0, 0],
                            z_min=0, z_max=3,
                            scale0 = 102400000, nb_tiles0 = 1,
-                           size_px = 256, dpi = 96, img_format = QImage.Format_ARGB32, skip_white_image = True):
+                           size_px = 256, img_format = QImage.Format_ARGB32, skip_white_image = True):
 
     def is_image_empty_np(image, white_threshold=254):
         """
@@ -43,7 +45,7 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
     settings.setDestinationCrs(project.crs())
     settings.setBackgroundColor(iface.mapCanvas().canvasColor())
     settings.setOutputSize(QSize(size_px, size_px))
-    settings.setOutputDpi(dpi)
+    settings.setOutputDpi(90.714)
 
     # get layers: only the visible ones
     layer_tree = project.layerTreeRoot()
@@ -60,7 +62,9 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
 
         scale = scale0 / 2 ** z
         nb_tiles = nb_tiles0 * 2 ** z
-        size_m = (size_px * 0.0254 * scale) / dpi
+        pix_size_m = scale * 0.00028
+        #size_m = (size_px * 0.0254 * scale) / dpi
+        size_m = size_px * pix_size_m
 
         # check
         sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
@@ -99,8 +103,8 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
                 if not os.path.exists(f): os.makedirs(f)
 
                 # save image
-                #output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
-                #image.save(output_path, "PNG")
+                output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
+                image.save(output_path, "PNG")
                 output_path = f + str(i)+".png"
                 image.save(output_path, "PNG")
 

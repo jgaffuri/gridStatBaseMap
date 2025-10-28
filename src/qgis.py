@@ -112,7 +112,7 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
 tile_from_qgis_project(output_folder = "/home/juju/Bureau/tiles/",
     origin_point = [0, 6000000],
     z_min = 1,
-    z_max = 5,
+    z_max = 6,
 )
 
 print("done")

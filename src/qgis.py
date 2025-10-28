@@ -18,6 +18,9 @@ from qgis.utils import iface
 # Adjust this path to your QGIS installation
 QGIS_PREFIX_PATH = "/usr"
 
+print(sys.prefix)
+
+
 # Initialize QGIS
 qgs = QgsApplication([], False)
 qgs.setPrefixPath(QGIS_PREFIX_PATH, True)
@@ -125,6 +128,7 @@ tile_from_qgis_project(
     origin_point = [0, 6000000],
     z_min = 9,
     z_max = 10,
+    img_format=QImage.Format_Grayscale16,
 )
 
 print("done")

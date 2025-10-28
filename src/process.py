@@ -14,17 +14,11 @@ from PyQt5.QtGui import QImage, QPainter, QColor
 from PyQt5.QtCore import QSize
 
 
-# Initialize QGIS
-qgs = QgsApplication([], False)
-qgs.setPrefixPath(sys.prefix, True)
-qgs.initQgis()
-
-
 
 def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                            z_min=0, z_max=3,
                            scale0 = 102400000, nb_tiles0 = 1,
-                           size_px = 256, img_format = QImage.Format_RGB32, skip_white_image = True):
+                           tile_size_px = 256, img_format = QImage.Format_RGB32, skip_white_image = True):
 
     def is_image_empty_np(image: QImage, white_threshold=255):
         """
@@ -64,7 +58,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
     settings = QgsMapSettings()
     settings.setDestinationCrs(project.crs())
     settings.setBackgroundColor(QColor(255, 255, 255))
-    settings.setOutputSize(QSize(size_px, size_px))
+    settings.setOutputSize(QSize(tile_size_px, tile_size_px))
     settings.setOutputDpi(90.714)
 
     # get layers: only the visible ones
@@ -84,7 +78,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
         nb_tiles = nb_tiles0 * 2 ** z
         pix_size_m = scale * 0.00028
         #size_m = (size_px * 0.0254 * scale) / dpi
-        size_m = size_px * pix_size_m
+        size_m = tile_size_px * pix_size_m
 
         # check
         sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
@@ -106,7 +100,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                 settings.setExtent(QgsRectangle(x, y, x+size_m, y+size_m))
 
                 # make image
-                image = QImage(size_px, size_px, img_format)
+                image = QImage(tile_size_px, tile_size_px, img_format)
 
                 # paint image
                 p = QPainter(image)
@@ -132,46 +126,22 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
 
 
 
+# Initialize QGIS
+qgs = QgsApplication([], False)
+qgs.setPrefixPath(sys.prefix, True)
+qgs.initQgis()
+
+
 tile_from_qgis_project(
     project_path= "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
     origin_point = [0, 6000000],
-    z_min = 2,
-    z_max = 11,
+    scale0 = 51200000, nb_tiles0 = 1, tile_size_px = 512,
+    z_min = 0,
+    z_max = 10,
     img_format=QImage.Format_Grayscale16,
 )
 
-print("done")
-
-# When done
+# close
 qgs.exitQgis()
 
-
-
-'''
-# see https://docs.qgis.org/3.40/en/docs/user_manual/processing_algs/qgis/rastertools.html#generate-xyz-tiles-directory
-
-import processing
-
-params = {
-          "OUTPUT_DIRECTORY":"/home/juju/Bureau/tiles",
-          #Extent (xmin, xmax, ymin, ymax)
-          #"EXTENT":"4300000,4400000,2700000,2800000 [EPSG:3035]",
-          "EXTENT":"900000,6600000,900000,5500000 [EPSG:3035]",
-          "ZOOM_MIN":3,
-          "ZOOM_MAX":12,
-          "DPI":96,
-          "ANTIALIAS":True,
-          "TILE_HEIGHT":256,"TILE_WIDTH":256,
-          "TILE_FORMAT":0,
-          "TMS_CONVENTION":False,
-          "BACKGROUND_COLOR":"rgba( 0, 0, 0, 0.00 )",
-          "HTML_ATTRIBUTION":"",
-          "HTML_OSM":False,
-          "HTML_TITLE":"",
-          "METATILESIZE":4,
-          "OUTPUT_HTML":"",
-          "QUALITY":75
-          }
-processing.run("native:tilesxyzdirectory", params)
-'''

@@ -31,7 +31,7 @@ qgs.initQgis()
 def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                            z_min=0, z_max=3,
                            scale0 = 102400000, nb_tiles0 = 1,
-                           size_px = 256, img_format = QImage.Format_ARGB32, skip_white_image = True):
+                           size_px = 256, img_format = QImage.Format_RGB32, skip_white_image = True):
 
     def is_image_empty_np(image, white_threshold=254):
         """

@@ -69,6 +69,7 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
         # check
         sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
         ddd = size_m - sc.xMaximum()+sc.xMinimum()
+        print(sc)
         assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
         for j in range(nb_tiles):

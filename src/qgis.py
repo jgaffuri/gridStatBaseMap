@@ -13,6 +13,11 @@ from PyQt5.QtCore import QSize
 from qgis.utils import iface
 
 
+# change to pixel 
+#DPI=ground resolution (m/px)0.0254​
+
+
+
 def tile_from_qgis_project(output_folder, origin_point = [0, 0],
                            z_min=0, z_max=3,
                            scale0 = 102400000, nb_tiles0 = 1,

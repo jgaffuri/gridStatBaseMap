@@ -26,17 +26,34 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                            scale0 = 102400000, nb_tiles0 = 1,
                            size_px = 256, img_format = QImage.Format_RGB32, skip_white_image = True):
 
-    def is_image_empty_np(image, white_threshold=255):
+    def is_image_empty_np(image: QImage, white_threshold=255):
         """
         Checks if image is almost white everywhere.
-        white_threshold: 0-255 value — higher means more lenient.
+        Works with Grayscale16, Grayscale8, RGB32, ARGB32, etc.
         """
         ptr = image.bits()
         ptr.setsize(image.byteCount())
-        arr = np.frombuffer(ptr, np.uint8).reshape(image.height(), image.width(), 4)
-        mean_value = arr[..., :3].mean()  # average RGB
-        return mean_value >= white_threshold
+        buf = np.frombuffer(ptr, np.uint8)
 
+        if image.format() in (QImage.Format_ARGB32, QImage.Format_RGB32):
+            arr = buf.reshape(image.height(), image.width(), 4)
+            mean_value = arr[..., :3].mean()
+        elif image.format() == QImage.Format_RGB888:
+            arr = buf.reshape(image.height(), image.width(), 3)
+            mean_value = arr.mean()
+        elif image.format() in (QImage.Format_Grayscale8,):
+            arr = buf.reshape(image.height(), image.width())
+            mean_value = arr.mean()
+        elif image.format() in (QImage.Format_Grayscale16,):
+            # two bytes per pixel, need to view as uint16
+            arr = buf.view(np.uint16).reshape(image.height(), image.width())
+            # Scale 16-bit grayscale to 0–255 range
+            arr8 = (arr / 257).astype(np.uint8)  # 65535/255 ≈ 257
+            mean_value = arr8.mean()
+        else:
+            raise ValueError(f"Unsupported QImage format: {image.format()}")
+
+        return mean_value >= white_threshold
 
     # read project
     project = QgsProject.instance()

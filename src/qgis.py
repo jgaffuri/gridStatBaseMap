@@ -1,7 +1,9 @@
+import sys
 import os
 import numpy as np
 from datetime import datetime
 from qgis.core import (
+    QgsApplication,
     QgsProject,
     QgsMapSettings,
     QgsMapRendererCustomPainterJob,
@@ -13,11 +15,14 @@ from PyQt5.QtCore import QSize
 from qgis.utils import iface
 
 
-# change to pixel 
-#DPI=ground resolution (m/px) / 0.0254​
-# PixelSize=ScaleDenominator×0.00028
-# Tile size in map units=tileWidth×pixelSize
-# 90.714 DPI
+# Adjust this path to your QGIS installation
+QGIS_PREFIX_PATH = "/usr"
+
+# Initialize QGIS
+qgs = QgsApplication([], False)
+qgs.setPrefixPath(QGIS_PREFIX_PATH, True)
+qgs.initQgis()
+
 
 
 def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
@@ -113,6 +118,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
 
 
 
+
 tile_from_qgis_project(
     project_path= "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
@@ -123,7 +129,8 @@ tile_from_qgis_project(
 
 print("done")
 
-
+# When done
+qgs.exitQgis()
 
 
 

@@ -20,7 +20,7 @@ from qgis.utils import iface
 # 90.714 DPI
 
 
-def tile_from_qgis_project(output_folder, origin_point = [0, 0],
+def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                            z_min=0, z_max=3,
                            scale0 = 102400000, nb_tiles0 = 1,
                            size_px = 256, img_format = QImage.Format_ARGB32, skip_white_image = True):
@@ -37,8 +37,10 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
         return mean_value >= white_threshold
 
 
-    # get current project
+    # read project
     project = QgsProject.instance()
+    project.read(project_path)
+
 
     # set map settings
     settings = QgsMapSettings()
@@ -111,7 +113,9 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
 
 
 
-tile_from_qgis_project(output_folder = "/home/juju/Bureau/tiles/",
+tile_from_qgis_project(
+    project_path= "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
+    output_folder = "/home/juju/Bureau/tiles/",
     origin_point = [0, 6000000],
     z_min = 9,
     z_max = 10,

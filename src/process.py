@@ -137,8 +137,8 @@ tile_from_qgis_project(
     output_folder = "/home/juju/Bureau/tiles/",
     origin_point = [0, 6000000],
     scale0 = 51200000, nb_tiles0 = 1, tile_size_px = 512,
-    z_min = 0,
-    z_max = 10,
+    z_min = 7,
+    z_max = 11,
     img_format = QImage.Format_Grayscale16,
 )
 

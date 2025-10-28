@@ -69,7 +69,6 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
         # check
         sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
         ddd = size_m - sc.xMaximum()+sc.xMinimum()
-        print(sc)
         assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
         for j in range(nb_tiles):
@@ -97,8 +96,7 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
                 p.end()
 
                 # skip if map empty
-                #TODO test: should work with 255
-                if skip_white_image and is_image_empty_np(image, white_threshold=254.999999999999): continue
+                if skip_white_image and is_image_empty_np(image, white_threshold=255): continue
 
                 # create folder, if needed
                 if not os.path.exists(f): os.makedirs(f)

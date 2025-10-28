@@ -104,15 +104,15 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
                 # save image
                 output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
                 image.save(output_path, "PNG")
-                output_path = f + str(i)+".png"
-                image.save(output_path, "PNG")
+                #output_path = f + str(i)+".png"
+                #image.save(output_path, "PNG")
 
 
 
 tile_from_qgis_project(output_folder = "/home/juju/Bureau/tiles/",
     origin_point = [0, 6000000],
-    z_min = 1,
-    z_max = 6,
+    z_min = 7,
+    z_max = 8,
 )
 
 print("done")

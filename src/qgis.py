@@ -102,9 +102,11 @@ def tile_from_qgis_project(output_folder, origin_point = [0, 0],
                 if not os.path.exists(f): os.makedirs(f)
 
                 # save image
-                output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
+                output_path = f + str(i)+".png"
                 image.save(output_path, "PNG")
-                #output_path = f + str(i)+".png"
+
+                # for debugging
+                #output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
                 #image.save(output_path, "PNG")
 
 

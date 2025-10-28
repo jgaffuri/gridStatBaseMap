@@ -10,17 +10,13 @@ from qgis.core import (
     QgsRectangle,
     QgsPointXY
 )
-from PyQt5.QtGui import QImage, QPainter
+from PyQt5.QtGui import QImage, QPainter, QColor
 from PyQt5.QtCore import QSize
-from qgis.utils import iface
 
-
-# Adjust this path to your QGIS installation
-QGIS_PREFIX_PATH = sys.prefix #"/usr"
 
 # Initialize QGIS
 qgs = QgsApplication([], False)
-qgs.setPrefixPath(QGIS_PREFIX_PATH, True)
+qgs.setPrefixPath(sys.prefix, True)
 qgs.initQgis()
 
 
@@ -30,7 +26,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                            scale0 = 102400000, nb_tiles0 = 1,
                            size_px = 256, img_format = QImage.Format_RGB32, skip_white_image = True):
 
-    def is_image_empty_np(image, white_threshold=254):
+    def is_image_empty_np(image, white_threshold=255):
         """
         Checks if image is almost white everywhere.
         white_threshold: 0-255 value — higher means more lenient.
@@ -50,7 +46,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
     # set map settings
     settings = QgsMapSettings()
     settings.setDestinationCrs(project.crs())
-    settings.setBackgroundColor(iface.mapCanvas().canvasColor())
+    settings.setBackgroundColor(QColor(255, 255, 255))
     settings.setOutputSize(QSize(size_px, size_px))
     settings.setOutputDpi(90.714)
 
@@ -103,7 +99,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                 p.end()
 
                 # skip if map empty
-                if skip_white_image and is_image_empty_np(image, white_threshold=255): continue
+                if skip_white_image and is_image_empty_np(image): continue
 
                 # create folder, if needed
                 if not os.path.exists(f): os.makedirs(f)
@@ -123,8 +119,8 @@ tile_from_qgis_project(
     project_path= "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
     origin_point = [0, 6000000],
-    z_min = 9,
-    z_max = 10,
+    z_min = 2,
+    z_max = 4,
     img_format=QImage.Format_Grayscale16,
 )
 

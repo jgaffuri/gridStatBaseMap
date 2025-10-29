@@ -91,7 +91,7 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
             # output folder
             f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
-            print(datetime.now(), "z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", scale, "size_m=", size_m)
+            print(datetime.now(), "z=", z, str(j+1) + "/" + str(nb_tiles), "scale=", int(scale))
 
             for i in range(nb_tiles):
                 y = y0 - (i+1)*size_m
@@ -137,7 +137,7 @@ tile_from_qgis_project(
     output_folder = "/home/juju/Bureau/tiles/",
     origin_point = [0, 6000000],
     scale0 = 51200000, nb_tiles0 = 1, tile_size_px = 512,
-    z_min = 7,
+    z_min = 9,
     z_max = 11,
     img_format = QImage.Format_Grayscale16,
 )

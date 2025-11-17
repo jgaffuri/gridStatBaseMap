@@ -14,6 +14,12 @@ from PyQt5.QtGui import QImage, QPainter, QColor
 from PyQt5.QtCore import QSize
 
 
+#TODO: instead of nb_tiles0, define bbox. For EPSG:3035, use 0,0,8000000,6000000
+#TODO: define resolutions instead of scales ?
+#TODO: adopt new scheme
+
+
+
 
 def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
                            z_min=0, z_max=3,
@@ -84,6 +90,8 @@ def tile_from_qgis_project(project_path, output_folder, origin_point = [0, 0],
         sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
         ddd = size_m - sc.xMaximum()+sc.xMinimum()
         assert ddd < 1e-9, "Inconsitent size_m: " + str(size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
+
+        #print("z=", z, "scale=", scale, "resolution=", pix_size_m, "m")
 
         for j in range(nb_tiles):
             x = x0 + j*size_m

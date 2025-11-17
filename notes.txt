@@ -1,3 +1,86 @@
+
+z= 0 scale= 409.6M resolution= 114688 m
+z= 1 scale= 204.8M resolution= 57344 m
+z= 2 scale= 102.4M resolution= 28672 m
+z= 3 scale= 51.2M resolution= 14336 m
+z= 4 scale= 25.6M resolution= 7168 m
+z= 5 scale= 12.8M resolution= 3584 m
+z= 6 scale= 6.4M resolution= 1792 m
+z= 7 scale= 3.2M resolution= 896 m
+z= 8 scale= 1.6M resolution= 448 m
+z= 9 scale= 800k resolution= 224 m
+z= 10 scale= 400k resolution= 112 m
+z= 11 scale= 200k resolution= 56 m
+z= 12 scale= 100k resolution= 28 m
+z= 13 scale= 50k resolution= 14 m
+z= 14 scale= 25k resolution= 7 m
+z= 15 scale= 12500 resolution= 3.5 m
+z= 16 scale= 6250 resolution= 1.75 m
+z= 17 scale= 3125 resolution= 0.875 m
+z= 18 scale= 1562.5 resolution= 0.4375 m
+z= 19 scale= 781.25 resolution= 0.21875 m
+
+
+
+web mercator:
+z= 0 scale= 591 657 527.591555
+z= 16 scale= 9027.977411
+
+
+
+Uldis' thing:
+
+starts at zoom level 4 at scale 73,957,338.86
+
+    0- 156543.03392804097
+591 658 710.91
+    1- 78271.51696402048
+295 829 355.455
+    2- 39135.75848201024
+147 914 677.727
+    3- 19567.87924100512
+73 957 338.8637
+    4- 9783.93962050256
+36 978 669.4319
+    5- 4891.96981025128
+18 489 334.7159
+    6- 2445.98490512564
+9 244 667.35797
+    7- 1222.99245256282
+4 622 333.67898
+    8- 611.49622628141
+2 311 166.83949
+    9- 305.748113140705
+1 155 583.41975
+    10- 152.8740565703525
+577 791.709873
+    11- 76.43702828517625
+288 895.854937
+    12- 38.21851414258813
+144 447.927468
+    13- 19.109257071294063
+72 223.9637341
+    14- 9.554628535647032
+36 111.9818671
+    15- 4.777314267823516
+18 055.9909335
+    16- 2.388657133911758
+9 027.99546677
+    17- 1.194328566955879
+4 513.99773338
+    18- 0.597164283477939
+2 256.99886669
+
+
+
+
+
+
+
+
+
+
+
 https://gdal.org/programs/gdal2tiles.html
 https://gdal.org/programs/gdal2tiles.html#cmdoption-gdal2tiles-p
 
@@ -14,3 +97,6 @@ scale 1:800 000
 211.6673615 m/pix
 211.6735723 m/pix
 -> 211.7 m/pix
+
+
+

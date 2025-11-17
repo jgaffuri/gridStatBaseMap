@@ -78,9 +78,6 @@ starts at zoom level 4 at scale 73,957,338.86
 
 
 
-
-
-
 https://gdal.org/programs/gdal2tiles.html
 https://gdal.org/programs/gdal2tiles.html#cmdoption-gdal2tiles-p
 

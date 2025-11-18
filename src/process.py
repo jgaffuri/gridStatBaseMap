@@ -102,7 +102,7 @@ def tile_from_qgis_project(project_path,
         j_max = ceil((x_max-x0)/tile_size_m)
         i_max = ceil((y0-y_min)/tile_size_m)
 
-        print(j_min, j_max, i_min, i_max)
+        #print(j_min, j_max, i_min, i_max)
 
         for j in range(j_min, j_max):
             x = x0 + j*tile_size_m
@@ -155,7 +155,7 @@ tile_from_qgis_project(
     project_path = "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
     resolution0 = 114688,
-    extent = [3000000, 2000000, 3600000, 2600000],
+    extent = [0, 0, 6000000, 6000000],
     origin_point = [0, 6000000],
     tile_size_px = 512,
     z_min = 6,

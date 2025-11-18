@@ -97,10 +97,12 @@ def tile_from_qgis_project(project_path,
         assert ddd < 1e-9, "Inconsitent size_m: " + str(tile_size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
         # compute tile numbers
-        j_min = floor((y_min-y0)/tile_size_m)
-        j_max = ceil((y_max-y0)/tile_size_m)
-        i_min = floor((x_min-x0)/tile_size_m)
-        i_max = ceil((x_max-x0)/tile_size_m)
+        j_min = floor((x_min-x0)/tile_size_m)
+        i_min = floor((y0-y_max)/tile_size_m)
+        j_max = ceil((x_max-x0)/tile_size_m)
+        i_max = ceil((y0-y_min)/tile_size_m)
+
+        print(j_min, j_max, i_min, i_max)
 
         for j in range(j_min, j_max):
             x = x0 + j*tile_size_m
@@ -111,6 +113,7 @@ def tile_from_qgis_project(project_path,
             print(datetime.now(), "z=", z, str(j+1) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
 
             for i in range(i_min, i_max):
+                print(j,i)
                 y = y0 - (i+1)*tile_size_m
 
                 # set image geo extent
@@ -150,10 +153,10 @@ qgs.initQgis()
 
 
 tile_from_qgis_project(
-    project_path= "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
+    project_path = "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
     resolution0 = 114688,
-    extent=[3700000, 2400000, 3900000, 2600000],
+    extent = [3700000, 2400000, 3900000, 2600000],
     origin_point = [0, 6000000],
     tile_size_px = 512,
     z_min = 6,

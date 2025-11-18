@@ -15,8 +15,6 @@ from PyQt5.QtGui import QImage, QPainter, QColor
 from PyQt5.QtCore import QSize
 
 
-#TODO: adopt new scheme
-
 
 def tile_from_qgis_project(project_path,
                            output_folder,

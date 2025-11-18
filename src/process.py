@@ -113,7 +113,6 @@ def tile_from_qgis_project(project_path,
             print(datetime.now(), "z=", z, str(j+1) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
 
             for i in range(i_min, i_max):
-                print(j,i)
                 y = y0 - (i+1)*tile_size_m
 
                 # set image geo extent
@@ -156,11 +155,11 @@ tile_from_qgis_project(
     project_path = "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
     resolution0 = 114688,
-    extent = [3700000, 2400000, 3900000, 2600000],
+    extent = [3000000, 2000000, 3600000, 2600000],
     origin_point = [0, 6000000],
     tile_size_px = 512,
     z_min = 6,
-    z_max = 7,
+    z_max = 10,
     img_format = QImage.Format_Grayscale16,
 )
 

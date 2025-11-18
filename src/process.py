@@ -159,7 +159,7 @@ tile_from_qgis_project(
     extent = [4060000, 2960000, 4080000, 2980000],
     origin_point = [0, 6000000],
     tile_size_px = 512,
-    z_min = 0,
+    z_min = 7,
     z_max = 14,
     img_format = QImage.Format_Grayscale16,
 )

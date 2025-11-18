@@ -110,7 +110,7 @@ def tile_from_qgis_project(project_path,
             # output folder
             f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
-            print(datetime.now(), "z=", z, str(j+1) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
+            print(datetime.now(), "z=", z, str(j+1-j_min) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
 
             for i in range(i_min, i_max):
                 y = y0 - (i+1)*tile_size_m

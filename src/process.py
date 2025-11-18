@@ -15,10 +15,7 @@ from PyQt5.QtGui import QImage, QPainter, QColor
 from PyQt5.QtCore import QSize
 
 
-#TODO: instead of nb_tiles0, define bbox. For EPSG:3035, use 0,0,8000000,6000000
 #TODO: adopt new scheme
-
-
 
 
 def tile_from_qgis_project(project_path, output_folder,
@@ -154,10 +151,11 @@ qgs.initQgis()
 tile_from_qgis_project(
     project_path= "/home/juju/workspace/gridStatBaseMap/src/project.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
+    resolution0 = 114688,
     origin_point = [0, 6000000],
-    scale0 = 51200000, nb_tiles0 = 1, tile_size_px = 512,
-    z_min = 9,
-    z_max = 11,
+    tile_size_px = 512,
+    z_min = 6,
+    z_max = 7,
     img_format = QImage.Format_Grayscale16,
 )
 

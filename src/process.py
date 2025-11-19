@@ -164,7 +164,7 @@ tile_from_qgis_project(
     origin_point = [0, 6000000],
     tile_size_px = 256, # 512 256
     z_min = 0,
-    z_max = 12,
+    z_max = 13,
     # Format_RGB16 Format_RGB32 Format_Grayscale16, # see on https://doc.qt.io/qt-6/qimage.html
     img_format = QImage.Format_RGB32,
 )

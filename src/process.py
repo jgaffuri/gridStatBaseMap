@@ -96,13 +96,13 @@ def tile_from_qgis_project(project_path,
 
         # compute tile numbers
         j_min = floor((x_min-x0)/tile_size_m)
-        i_min = floor((y0-y_max)/tile_size_m)
         j_max = ceil((x_max-x0)/tile_size_m)
+        i_min = floor((y0-y_max)/tile_size_m)
         i_max = ceil((y0-y_min)/tile_size_m)
 
         #print(j_min, j_max, i_min, i_max)
 
-        for j in range(j_min, j_max):
+        for j in range(j_min, j_max+1):
             x = x0 + j*tile_size_m
 
             # output folder
@@ -110,7 +110,7 @@ def tile_from_qgis_project(project_path,
 
             print(datetime.now(), "z=", z, str(j+1-j_min) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
 
-            for i in range(i_min, i_max):
+            for i in range(i_min, i_max+1):
                 y = y0 - (i+1)*tile_size_m
 
                 # set image geo extent

@@ -153,7 +153,7 @@ tile_from_qgis_project(
     project_path = "/home/juju/workspace/gridStatBaseMap/src/elevation.qgz",
     output_folder = "/home/juju/Bureau/tiles/",
     resolution0 = 114688,
-    extent = [0, 0, 6000000, 6000000],
+    extent = [0, 0, 6000000, 8000000],
     #extent = [4060000, 2960000, 4080000, 2980000],
     origin_point = [0, 6000000],
     tile_size_px = 256, # 512 256

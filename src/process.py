@@ -15,7 +15,6 @@ from PyQt5.QtGui import QImage, QPainter, QColor
 from PyQt5.QtCore import QSize
 
 
-# fix limits
 # new elevation
 # new road - with seas ?
 

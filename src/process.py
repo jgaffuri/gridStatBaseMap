@@ -107,15 +107,15 @@ def tile_from_qgis_project(project_path,
 
         #print(j_min, j_max, i_min, i_max)
 
-        for j in range(j_min, j_max+1):
+        for j in range(j_min, j_max):
             x = x0 + j*tile_size_m
 
             # output folder
             f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
-            print(datetime.now(), "z=", z, str(j+1-j_min) + "/" + str(j_max-j_min)+1, "scale=", scale, "resolution=", pix_size_m, "m")
+            print(datetime.now(), "z=", z, str(j+1-j_min) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
 
-            for i in range(i_min, i_max+1):
+            for i in range(i_min, i_max):
                 y = y0 - (i+1)*tile_size_m
 
                 # set image geo extent
@@ -164,7 +164,7 @@ tile_from_qgis_project(
     origin_point = [0, 6000000],
     tile_size_px = 256, # 512 256
     z_min = 0,
-    z_max = 12,
+    z_max = 15,
     # Format_RGB16 Format_RGB32 Format_Grayscale16, # see on https://doc.qt.io/qt-6/qimage.html
     img_format = QImage.Format_RGB32,
 )

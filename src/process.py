@@ -160,7 +160,7 @@ tile_from_qgis_project(
     z_min = 0,
     z_max = 13,
     # Format_RGB16 Format_RGB32 Format_Grayscale16, # see on https://doc.qt.io/qt-6/qimage.html
-    img_format = QImage.Format_RGB16,
+    img_format = QImage.Format_RGB32,
 )
 
 # close
@@ -191,15 +191,7 @@ qgs.exitQgis()
 
 
 
-
-
-
-
-
-
-
-
-
+'''
 def tile_from_qgis_project_old(project_path, output_folder, origin_point = [0, 0],
                            z_min=0, z_max=3,
                            scale0 = 102400000, nb_tiles0 = 1,
@@ -310,6 +302,5 @@ def tile_from_qgis_project_old(project_path, output_folder, origin_point = [0, 0
                 #output_path = output_folder + "/" + str(z) + "/" + str(j) + "_" + str(i)+".png"
                 #image.save(output_path, "PNG")
 
-
-
+'''
 

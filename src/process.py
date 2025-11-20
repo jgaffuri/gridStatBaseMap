@@ -1,4 +1,5 @@
 from qgis_tiler import tile_from_qgis_project
+from PyQt5.QtGui import QImage
 
 
 '''
@@ -26,7 +27,7 @@ tile_from_qgis_project(
     extent = [0, 0, 8000000, 6000000],
     origin_point = [0, 6000000],
     tile_size_px = 512, # 512 256
-    z_min = 0,
+    z_min = 14,
     z_max = 14,
     # Format_RGB16 Format_RGB32 Format_Grayscale16, # see on https://doc.qt.io/qt-6/qimage.html
     img_format = QImage.Format_Grayscale16,

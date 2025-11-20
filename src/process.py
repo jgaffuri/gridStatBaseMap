@@ -29,6 +29,7 @@ tile_from_qgis_project(
     tile_size_px = 512, # 512 256
     z_min = 14,
     z_max = 14,
+    force_column_start = 1376,
     # Format_RGB16 Format_RGB32 Format_Grayscale16, # see on https://doc.qt.io/qt-6/qimage.html
     img_format = QImage.Format_Grayscale16,
 )

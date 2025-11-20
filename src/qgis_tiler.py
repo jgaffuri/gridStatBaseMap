@@ -80,94 +80,97 @@ def tile_from_qgis_project(project_path,
     qgs.setPrefixPath(sys.prefix, True)
     qgs.initQgis()
 
-    # read qgis project
-    project = QgsProject.instance()
-    project.read(project_path)
+    try:
 
-    # define map settings
-    settings = QgsMapSettings()
-    settings.setDestinationCrs(project.crs())
-    settings.setBackgroundColor(backgroundcolor)
-    settings.setOutputSize(QSize(tile_size_px, tile_size_px))
-    settings.setOutputDpi(90.714) # it seems to work :-)
+        # read qgis project
+        project = QgsProject.instance()
+        project.read(project_path)
 
-    # get layers: only the visible ones
-    layer_tree = project.layerTreeRoot()
-    ordered_layers = layer_tree.layerOrder()
-    visible_layers = [
-        lyr for lyr in ordered_layers
-        if layer_tree.findLayer(lyr.id()).isVisible()
-    ]
-    settings.setLayers(visible_layers)
+        # define map settings
+        settings = QgsMapSettings()
+        settings.setDestinationCrs(project.crs())
+        settings.setBackgroundColor(backgroundcolor)
+        settings.setOutputSize(QSize(tile_size_px, tile_size_px))
+        settings.setOutputDpi(90.714) # it seems to work :-)
 
-    # parse origin point and extent
-    [x0,y0] = origin_point
-    [x_min, y_min, x_max, y_max] = extent
+        # get layers: only the visible ones
+        layer_tree = project.layerTreeRoot()
+        ordered_layers = layer_tree.layerOrder()
+        visible_layers = [
+            lyr for lyr in ordered_layers
+            if layer_tree.findLayer(lyr.id()).isVisible()
+        ]
+        settings.setLayers(visible_layers)
 
-    # handle zoom levels
-    for z in range(z_min, z_max+1):
+        # parse origin point and extent
+        [x0,y0] = origin_point
+        [x_min, y_min, x_max, y_max] = extent
 
-        # compute zoom related parameters
-        pix_size_m = resolution0 / 2 ** z
-        scale = pix_size_m / 0.00028
-        tile_size_m = tile_size_px * pix_size_m
-        #size_m = (size_px * 0.0254 * scale) / dpi
+        # handle zoom levels
+        for z in range(z_min, z_max+1):
 
-        # check that...
-        sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
-        ddd = tile_size_m - sc.xMaximum()+sc.xMinimum()
-        assert ddd < 1e-9, "Inconsitent size_m: " + str(tile_size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
+            # compute zoom related parameters
+            pix_size_m = resolution0 / 2 ** z
+            scale = pix_size_m / 0.00028
+            tile_size_m = tile_size_px * pix_size_m
+            #size_m = (size_px * 0.0254 * scale) / dpi
 
-        # compute tile indexes
-        # columns
-        j_min = floor((x_min-x0)/tile_size_m)
-        j_max = ceil((x_max-x0)/tile_size_m)
-        # rows
-        i_min = floor((y0-y_max)/tile_size_m)
-        i_max = ceil((y0-y_min)/tile_size_m)
+            # check that...
+            sc = settings.computeExtentForScale(QgsPointXY(0, 0), scale)
+            ddd = tile_size_m - sc.xMaximum()+sc.xMinimum()
+            assert ddd < 1e-9, "Inconsitent size_m: " + str(tile_size_m) + " " + str(sc.xMaximum()-sc.xMinimum())
 
-        # columns
-        for j in range(j_min, j_max):
-
-            # tile column lower left corner x coordinate
-            x = x0 + j*tile_size_m
-
-            # output folder
-            f = output_folder + "/" + str(z) + "/" + str(j) + "/"
-
-            print(datetime.now(), "z=", z, str(j+1-j_min) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
-
+            # compute tile indexes
+            # columns
+            j_min = floor((x_min-x0)/tile_size_m)
+            j_max = ceil((x_max-x0)/tile_size_m)
             # rows
-            for i in range(i_min, i_max):
+            i_min = floor((y0-y_max)/tile_size_m)
+            i_max = ceil((y0-y_min)/tile_size_m)
 
-                # tile row lower left corner y coordinate
-                y = y0 - (i+1)*tile_size_m
+            # columns
+            for j in range(j_min, j_max):
 
-                # set image geo extent
-                settings.setExtent(QgsRectangle(x, y, x+tile_size_m, y+tile_size_m))
+                # tile column lower left corner x coordinate
+                x = x0 + j*tile_size_m
 
-                # make image
-                image = QImage(tile_size_px, tile_size_px, img_format)
+                # output folder
+                f = output_folder + "/" + str(z) + "/" + str(j) + "/"
 
-                # paint image
-                p = QPainter(image)
-                job = QgsMapRendererCustomPainterJob(settings, p)
-                job.start()
-                job.waitForFinished()
-                p.end()
+                print(datetime.now(), "z=", z, str(j+1-j_min) + "/" + str(j_max-j_min), "scale=", scale, "resolution=", pix_size_m, "m")
 
-                # skip if image is empty
-                if skip_white_image and is_image_empty_np(image): continue
+                # rows
+                for i in range(i_min, i_max):
 
-                # create folder, if needed
-                if not os.path.exists(f): os.makedirs(f)
+                    # tile row lower left corner y coordinate
+                    y = y0 - (i+1)*tile_size_m
 
-                # save image
-                output_path = f + str(i)+".png"
-                image.save(output_path, "PNG")
+                    # set image geo extent
+                    settings.setExtent(QgsRectangle(x, y, x+tile_size_m, y+tile_size_m))
 
-    # close QGIS
-    qgs.exitQgis()
+                    # make image
+                    image = QImage(tile_size_px, tile_size_px, img_format)
+
+                    # paint image
+                    p = QPainter(image)
+                    job = QgsMapRendererCustomPainterJob(settings, p)
+                    job.start()
+                    job.waitForFinished()
+                    p.end()
+
+                    # skip if image is empty
+                    if skip_white_image and is_image_empty_np(image): continue
+
+                    # create folder, if needed
+                    if not os.path.exists(f): os.makedirs(f)
+
+                    # save image
+                    output_path = f + str(i)+".png"
+                    image.save(output_path, "PNG")
+
+    finally:
+        # close QGIS
+        qgs.exitQgis()
 
 
 

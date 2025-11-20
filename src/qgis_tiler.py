@@ -59,6 +59,7 @@ def tile_from_qgis_project(project_path,
                            img_format = QImage.Format_RGB32,
                            skip_white_image = True,
                            backgroundcolor = QColor(255, 255, 255),
+                           force_column_start = None,
                            ):
     """
     Create a XYZ slippy map tile set from a QGIS project, to be used with https://tile.aaa.org/{z}/{x}/{y}.png URL pattern.
@@ -74,6 +75,7 @@ def tile_from_qgis_project(project_path,
         img_format (QImage, optional): The image format. Defaults to QImage.Format_RGB32.
         skip_white_image (bool, optional): Set to True if white images do not need to be produced. Defaults to True.
         backgroundcolor (QColor, optional): The map background color. Defaults to QColor(255, 255, 255).
+        force_column_start (int, optional): If specified, it is the column index to start with. It can be used to continue a computation from this column index. Defaults to None.
     """
     # open QGIS
     qgs = QgsApplication([], False)
@@ -127,6 +129,10 @@ def tile_from_qgis_project(project_path,
             # rows
             i_min = floor((y0-y_max)/tile_size_m)
             i_max = ceil((y0-y_min)/tile_size_m)
+
+            #
+            if force_column_start is not None and force_column_start > j_min:
+                j_min = force_column_start
 
             # columns
             for j in range(j_min, j_max):
